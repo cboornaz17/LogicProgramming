@@ -3,11 +3,15 @@
 sentence(D1, Type, Op, Total)  --> find, a, set, of, digit(D1), type(Type), integers, that, oper(Op), to, digit(Total).
 sentence(D1, Type1, D2, Type2, Op, Total)  --> find, a, set, of, digit(D1), type(Type1), and, digit(D2), type(Type2), integers, that, oper(Op), to, digit(Total).
 
-digit(D) :- between(0, 100, D).
-type(T) --> [T], ["even"] | ["odd"] | ["both"].
-oper(O) --> [O], ["sum"] | ["multiply"].
+%% digit(D) --> between(0, 100, D).
+digit(abcd) --> ["abcd"].
+type(even) --> ["even"].
+type(odd) --> ["odd"].
+type(both) --> ["both"].
+oper(sum) --> ["sum"].
+oper(multiply) --> ["multiply"].
 
-find --> ["Find"].
+find --> ["find"].
 a --> ["a"].
 set --> ["set"].
 of --> ["of"].
@@ -26,34 +30,43 @@ compute(D1, Type1, D2, Type2, Oper, Total) :-
     fail.
 
 main(W) :-
-
-    %compute(sentence(W)),
-
+    
     nth0(0, W, A),
-    format('A ~s\n', A),
+    split_string(A, " ", "", L1),
 
-    atom_string(A, S),
-    format('S ~s\n', S),
+    write(L1), nl,
 
-    split_string(S, " ", "", L1),
-    write(L1).
+    sentence(D1, Type, Op, Total, L1, []),
+
+    write("here"), nl,
+
+    write(D1), nl.
+
+    %% nth0(0, W, A),
+    %% format('A ~s\n', A),
+
+    %% atom_string(A, S),
+    %% format('S ~s\n', S),
+
+    %% split_string(S, " ", "", L1),
+    %% write(L1).
 
 
 
 
-word(article,a). 
-word(article,every). 
-word(noun,criminal). 
-word(noun,'big kahuna burger'). 
-word(verb,eats). 
-word(verb,likes). 
+%% word(article,a). 
+%% word(article,every). 
+%% word(noun,criminal). 
+%% word(noun,'big kahuna burger'). 
+%% word(verb,eats). 
+%% word(verb,likes). 
 
-sentence(Word1,Word2,Word3,Word4,Word5):-
-	word(article,Word1), 
-	word(noun,Word2), 
-	word(verb,Word3), 
-	word(article,Word4), 
-	word(noun,Word5). 
+%% sentence(Word1,Word2,Word3,Word4,Word5):-
+%% 	word(article,Word1), 
+%% 	word(noun,Word2), 
+%% 	word(verb,Word3), 
+%% 	word(article,Word4), 
+%% 	word(noun,Word5). 
 
 printsentences :-
 	sentence(W1,W2,W3,W4,W5),
