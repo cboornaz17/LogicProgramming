@@ -33,7 +33,7 @@ q(D2, D3, D4) :-
 
 allq(D) :-
 	findnsols(1, [D1, D2, D3], q(D1, D2, D3), D),
-    nth0(0, D, val1),
-    nth0(1, D, val2),
-    nth0(2, D, val3),
-    format('0,~d,~d,~d\n', val1, val2, val3).
+    nth0(0, D, Val1),
+    nth0(1, D, Val2),
+    nth0(2, D, Val3),
+    format('0,~d,~d,~d\n', Val1, Val2, Val3).
