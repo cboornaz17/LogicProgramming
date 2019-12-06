@@ -13,7 +13,7 @@ type(both) --> ["both"].
 oper(sum) --> ["sum"].
 oper(multiply) --> ["multiply"].
 
-find --> ["find"].
+find --> ["find"] | ["Find"].
 a --> ["a"].
 set --> ["set"].
 of --> ["of"].
@@ -36,7 +36,6 @@ main(W) :-
         % Handle different cases and call proper functions
         % Type is odd
         (   Type =@= odd ->
-            format('type is odd\n'),
             (   Op =@= sum ->
                 (   sumOdd(D1, Total) ;
                     format('No Solution\n')
@@ -50,7 +49,6 @@ main(W) :-
 
             % Type is even
         ;   Type =@= even ->
-            format('type is even\n'),
             (   Op =@= sum ->
                 (   sumEven(D1, Total) ;
                     format('No Solution\n')
@@ -114,7 +112,7 @@ main(W) :-
             handleOddBoth(D2, D1, Op, Total)
         )
 
-    ;   format('invalid sentence\n')
+    ;   format('Invalid String\n')
     ).
 
 % Handler functions dispatch to the proper computation functions
