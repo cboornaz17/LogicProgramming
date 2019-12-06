@@ -212,18 +212,18 @@ odd([X|Xs]) :-
     odd(Xs).
 
 % All items in list must be 0..Total, 0..128
-range([], Total).
+range([], _).
 range([X|Xs], Total) :-
     between(0,Total,X),
     between(0,128,X),
     range(Xs, Total).
 
 % All items in list must sum to Total
-sum([], Sum, Total) :-
+mySum([], Sum, Total) :-
     Sum =:= Total.
-sum([X|Xs], Sum, Total) :-
+mySum([X|Xs], Sum, Total) :-
     Sum =< Total,
-    sum(Xs, X + Sum, Total).
+    mySum(Xs, X + Sum, Total).
 
 % All items in list must multiply to Total
 product([], Product, Total) :-
@@ -242,7 +242,7 @@ sumEven(D1, Total) :-
     range(X, Total),
     even(X),
     all_different(X),
-    sum(X, 0, Total),
+    mySum(X, 0, Total),
     writeVals(X).
 
 % Sum odd
@@ -251,7 +251,7 @@ sumOdd(D1, Total) :-
     range(X, Total),
     odd(X),
     all_different(X),
-    sum(X, 0, Total),
+    mySum(X, 0, Total),
     writeVals(X).
 
 % Sum both
@@ -259,7 +259,7 @@ sumBoth(D1, Total) :-
     length(X, D1),
     range(X, Total),
     all_different(X),
-    sum(X, 0, Total),
+    mySum(X, 0, Total),
     writeVals(X).
 
 % Product even
@@ -299,7 +299,7 @@ sumEvenOdd(Deven, Dodd, Total) :-
     append(X1, X2, X),
     range(X, Total),
     all_different(X),
-    sum(X, 0, Total),
+    mySum(X, 0, Total),
     writeVals(X).
 
 % Sum even even
@@ -309,7 +309,7 @@ sumEvenEven(D1, D2, Total) :-
     range(X, Total),
     even(X),
     all_different(X),
-    sum(X, 0, Total),
+    mySum(X, 0, Total),
     writeVals(X).
 
 % Sum odd odd
@@ -319,7 +319,7 @@ sumOddOdd(D1, D2, Total) :-
     range(X, Total),
     odd(X),
     all_different(X),
-    sum(X, 0, Total),
+    mySum(X, 0, Total),
     writeVals(X).
 
 % Sum even both
@@ -330,7 +330,7 @@ sumEvenBoth(Deven, Dboth, Total) :-
     append(X1, X2, X),
     range(X, Total),
     all_different(X),
-    sum(X, 0, Total),
+    mySum(X, 0, Total),
     writeVals(X).
 
 % Sum odd both
@@ -341,7 +341,7 @@ sumOddBoth(Dodd, Dboth, Total) :-
     append(X1, X2, X),
     range(X, Total),
     all_different(X),
-    sum(X, 0, Total),
+    mySum(X, 0, Total),
     writeVals(X).
 
 % Sum both both
@@ -350,7 +350,7 @@ sumBothBoth(D1, D2, Total) :-
     length(X, D3),
     range(X, Total),
     all_different(X),
-    sum(X, 0, Total),
+    mySum(X, 0, Total),
     writeVals(X).
 
 % Product even odd
