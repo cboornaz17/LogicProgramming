@@ -1,5 +1,4 @@
 % "Learn Prolog Now!"  Exercise 2.3
-
 :- use_module(library(clpfd)).
 
 sentence(D1, Type, Op, Total)  --> find, a, set, of, digit(D1), type(Type), integers, that, oper(Op), to, digit(Total).
@@ -182,23 +181,83 @@ main(W) :-
     %% split_string(S, " ", "", L1),
     %% write(L1).
 
-%% Find a set of 2 even numbers that sum to 8
-%% even(D) :-
-%%     mod(D) #= 0.
+%% Common constraints
+even([]).
+even([X|Xs]) :-
+    X mod 2 #= 0,
+    even(Xs).
 
-%% odd(D) :-
-%%     mod(D) #= 0.
+odd([]).
+odd([X|Xs]) :-
+    X mod 2 #= 1,
+    odd(Xs).
 
-%% num(N) :-
-%%     between(0, 128, N).
+range([]).
+range([X|Xs]) :-
+    0 #=< X,
+    X #=< 128,
+    range(Xs).
 
-%% q(D1, D2) :-
-%%     even(D1),
-%%     even(D2),
-%%     D1 + D2 #= 8.
+product([X|Xs], Product, Total) :-
+    Temp = X * Product,
+    product([Xs], Temp, Total).
+product(X, Product, Total) :-
+    Temp = X * Product,
+    Temp #= Total.
 
-%% allq(D) :-
-%%     findnsols(1, [D1, D2], q(D1, D2), D),
-%%     nth0(0, D, Val1),
-%%     nth0(1, D, Val2),
-%%     format('~d,~d\n', Val1, Val2).
+%% Operation functions
+
+% Sum even
+sumEven(X, D1, Total) :-
+    length(X, D1),
+    range(X),
+    even(X),
+    all_different(X),
+    sum(X, #=, Total).
+
+sumEvenOut(X, D1, Total) :-
+    findall(A, sumEven(A, D1, Total), X),
+    term_variables(X, Vars),
+    labeling([enum, ff], Vars),
+    write(Vars), nl.
+
+% Sum odd
+sumOdd(X, D1, Total) :-
+    length(X, D1),
+    range(X),
+    odd(X),
+    all_different(X),
+    sum(X, #=, Total).
+
+sumOddOut(X, D1, Total) :-
+    findall(A, sumOdd(A, D1, Total), X),
+    term_variables(X, Vars),
+    labeling([enum, ff], Vars),
+    write(Vars), nl.
+
+% Sum both
+sumBoth(X, D1, Total) :-
+    length(X, D1),
+    range(X),
+    all_different(X),
+    sum(X, #=, Total).
+
+sumBothOut(X, D1, Total) :-
+    findall(A, sumBoth(A, D1, Total), X),
+    term_variables(X, Vars),
+    labeling([enum, ff], Vars),
+    write(Vars), nl.
+
+% Product even
+productEven(X, D1, Total) :-
+    length(X, D1),
+    range(X),
+    even(X),
+    all_different(X),
+    product(X, 1, Total).
+
+productEvenOut(X, D1, Total) :-
+    findall(A, productEven(A, D1, Total), X),
+    term_variables(X, Vars),
+    labeling([enum, ff], Vars),
+    write(Vars), nl.
