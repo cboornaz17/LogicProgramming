@@ -85,9 +85,124 @@ main(W) :-
         format('~d\n', D2),
         format('~s\n', Type2),
         format('~s\n', Op),
-        format('~d\n', Total)
+        format('~d\n', Total),
+
+        % Handle different cases and call proper functions
+        % Types are even and odd
+        (   Type1 =@= even, Type2 =@= odd ->
+            handleEvenOdd(D1, D2, Op, Total)
+        
+        ;   Type1 =@= odd, Type2 =@= even ->
+            handleEvenOdd(D2, D1, Op, Total)
+
+            % Types are both even
+        ;   Type1 =@= even, Type2 =@= even ->
+            handleEvenEven(D1, D2, Op, Total)
+
+            % Types are both odd
+        ;   Type1 =@= odd, Type2 =@= odd ->
+            handleOddOdd(D1, D2, Op, Total)
+
+            % Type is both both
+        ;   Type1 =@= both, Type2 =@= both ->
+            handleBothBoth(D1, D2, Op, Total)
+
+            % Type is even & both
+        ;   Type1 =@= even, Type2 =@= both ->
+            handleEvenBoth(D1, D2, Op, Total)
+
+        ;   Type1 =@= both, Type2 =@= even ->
+            handleEvenBoth(D2, D1, Op, Total)
+
+            % Type is odd & both
+        ;   Type1 =@= odd, Type2 =@= both ->
+            handleOddBoth(D1, D2, Op, Total)
+        
+        ;   Type1 =@= both, Type2 =@= odd ->
+            handleOddBoth(D2, D1, Op, Total)
+        )
+
     ;   format('invalid sentence\n')
     ).
+
+
+handleEvenOdd(EvenCount, OddCount, Op, Total) :-
+    (   Op =@= sum ->
+        format('sum ')
+        %sumBoth(X, D1, Type)
+    ;   Op =@= multiply ->
+        format('multiply ')
+        %productBoth(X, D1, Type)
+    ;   format('invalid operation\n'),
+        fail
+    ),
+    format('~d even ', EvenCount),
+    format('~d odd\n', OddCount).
+
+handleEvenEven(D1, D2, Op, Total) :-
+    (   Op =@= sum ->
+        format('sum ')
+        %sumBoth(X, D1, Type)
+    ;   Op =@= multiply ->
+        format('multiply ')
+        %productBoth(X, D1, Type)
+    ;   format('invalid operation\n'),
+        fail
+    ),
+    format('~d even ', D1),
+    format('~d even\n', D2).
+
+handleOddOdd(D1, D2, Op, Total) :-
+    (   Op =@= sum ->
+        format('sum ')
+        %sumBoth(X, D1, Type)
+    ;   Op =@= multiply ->
+        format('multiply ')
+        %productBoth(X, D1, Type)
+    ;   format('invalid operation\n'),
+        fail
+    ),
+    format('~d odd ', D1),
+    format('~d odd\n', D2).
+
+handleBothBoth(D1, D2, Op, Total) :-
+    (   Op =@= sum ->
+        format('sum ')
+        %sumBoth(X, D1, Type)
+    ;   Op =@= multiply ->
+        format('multiply ')
+        %productBoth(X, D1, Type)
+    ;   format('invalid operation\n'),
+        fail
+    ),
+    format('~d both ', D1),
+    format('~d both\n', D2).
+
+handleEvenBoth(D1, D2, Op, Total) :-
+    (   Op =@= sum ->
+        format('sum ')
+        %sumBoth(X, D1, Type)
+    ;   Op =@= multiply ->
+        format('multiply ')
+        %productBoth(X, D1, Type)
+    ;   format('invalid operation\n'),
+        fail
+    ),
+    format('~d even ', D1),
+    format('~d both\n', D2).
+
+handleOddBoth(D1, D2, Op, Total) :-
+    (   Op =@= sum ->
+        format('sum ')
+        %sumBoth(X, D1, Type)
+    ;   Op =@= multiply ->
+        format('multiply ')
+        %productBoth(X, D1, Type)
+    ;   format('invalid operation\n'),
+        fail
+    ),
+    format('~d odd ', D1),
+    format('~d both\n', D2).
 
 
 %% Common constraints
@@ -187,7 +302,7 @@ sumEvenOdd(X, Deven, Dodd, Total) :-
     range(X),
     all_different(X),
     sum(X, #=, Total),
-    write(X), nl,
+    write(X), nl.
 
 % Sum even even
 sumEvenEven(X, D1, D2, Total) :-
