@@ -101,22 +101,22 @@ odd([X|Xs]) :-
     X mod 2 #= 1,
     odd(Xs).
 
-range([]).
-range([X|Xs]) :-
+range([], Total).
+range([X|Xs], Total) :-
+    between(0,Total,X),
     between(0,128,X),
-    range(Xs).
+    range(Xs, Total).
 
-%% product([], [], Product, Total) :-
-%%     Product =:= Total.
-%% product([], [Y|Ys], Product, Total) :-
-%%     product([], Ys, Y * Product, Total).
-%% product([X|Xs], Y, Product, Total) :-
-%%     product(Xs, Y, X * Product, Total).
-
+sum([], Sum, Total) :-
+    Sum =:= Total.
+sum([X|Xs], Sum, Total) :-
+    Sum =< Total,
+    sum(Xs, X + Sum, Total).
 
 product([], Product, Total) :-
     Product =:= Total.
 product([X|Xs], Product, Total) :-
+    Product =< Total,
     product(Xs, X * Product, Total).
 
 %%% Operation functions
@@ -126,33 +126,33 @@ product([X|Xs], Product, Total) :-
 % Sum even
 sumEven(X, D1, Total) :-
     length(X, D1),
-    range(X),
+    range(X, Total),
     even(X),
     all_different(X),
-    sum(X, #=, Total),
+    sum(X, 0, Total),
     write(X), nl.
 
 % Sum odd
 sumOdd(X, D1, Total) :-
     length(X, D1),
-    range(X),
+    range(X, Total),
     odd(X),
     all_different(X),
-    sum(X, #=, Total),
+    sum(X, 0, Total),
     write(X), nl.
 
 % Sum both
 sumBoth(X, D1, Total) :-
     length(X, D1),
-    range(X),
+    range(X, Total),
     all_different(X),
-    sum(X, #=, Total),
+    sum(X, 0, Total),
     write(X), nl.
 
 % Product even
 productEven(X, D1, Total) :-
     length(X, D1),
-    range(X),
+    range(X, Total),
     even(X),
     all_different(X),
     product(X, 1, Total),
@@ -161,7 +161,7 @@ productEven(X, D1, Total) :-
 % Product odd
 productOdd(X, D1, Total) :-
     length(X, D1),
-    range(X),
+    range(X, Total),
     odd(X),
     all_different(X),
     product(X, 1, Total),
@@ -170,7 +170,7 @@ productOdd(X, D1, Total) :-
 % Product both
 productBoth(X, D1, Total) :-
     length(X, D1),
-    range(X),
+    range(X, Total),
     all_different(X),
     product(X, 1, Total),
     write(X), nl.
@@ -184,29 +184,29 @@ sumEvenOdd(X, Deven, Dodd, Total) :-
     even(X1),
     odd(X2),
     append(X1, X2, X),
-    range(X),
+    range(X, Total),
     all_different(X),
-    sum(X, #=, Total),
-    write(X), nl,
+    sum(X, 0, Total),
+    write(X), nl.
 
 % Sum even even
 sumEvenEven(X, D1, D2, Total) :-
     D3 is D1 + D2,
     length(X, D3),
-    range(X),
+    range(X, Total),
     even(X),
     all_different(X),
-    sum(X, #=, Total),
+    sum(X, 0, Total),
     write(X), nl.
 
 % Sum odd odd
 sumOddOdd(X, D1, D2, Total) :-
     D3 is D1 + D2,
     length(X, D3),
-    range(X),
+    range(X, Total),
     odd(X),
     all_different(X),
-    sum(X, #=, Total),
+    sum(X, 0, Total),
     write(X), nl.
 
 % Sum even odd
@@ -216,7 +216,7 @@ productEvenOdd(X, Deven, Dodd, Total) :-
     even(X1),
     odd(X2),
     append(X1, X2, X),
-    range(X),
+    range(X, Total),
     all_different(X),
     product(X, 1, Total),
     write(X), nl.
@@ -225,7 +225,7 @@ productEvenOdd(X, Deven, Dodd, Total) :-
 productEvenEven(X, D1, D2, Total) :-
     D3 is D1 + D2,
     length(X, D3),
-    range(X),
+    range(X, Total),
     even(X),
     all_different(X),
     product(X, 1, Total),
@@ -235,7 +235,7 @@ productEvenEven(X, D1, D2, Total) :-
 productOddOdd(X, D1, D2, Total) :-
     D3 is D1 + D2,
     length(X, D3),
-    range(X),
+    range(X, Total),
     odd(X),
     all_different(X),
     product(X, 1, Total),
