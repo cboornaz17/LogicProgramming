@@ -45,21 +45,37 @@ add_vars(C, N, L) :-
 compute(D1, Type, Oper, Total) :-
 
     (   Type =@= odd ->
-        format('type is odd\n')
+        format('type is odd\n'),
+        (   Oper =@= sum ->
+            format('sum odd\n')
+        ;   Oper =@= multiply ->
+            format('multiply odd\n')
+        ;   format('invalid operation\n')
+        )
     ;   Type =@= even ->
-        format('type is even\n')
-    ;   format('type is both\n')
-    ),
-
-    S = [],
-    get_sum(Total, Evens, S, D1),
-    format('finish function\n').
+        format('type is even\n'),
+        (   Oper =@= sum ->
+            format('sum even\n')
+        ;   Oper =@= multiply ->
+            format('multiply even\n')
+        ;   format('invalid operation\n')
+        )
+    ;   format('type is both\n'),
+        (   Oper =@= sum ->
+            format('sum both\n')
+        ;   Oper =@= multiply ->
+            format('multiply both\n')
+        ;   format('invalid operation\n')
+        )
+    ).
 
 
 compute(D1, Type1, D2, Type2, Oper, Total) :-
     format('word\n'),
     fail.
 
+
+% swipl -q -f part2.pl -t main "find a set of 3 odd integers that sum to 8"
 main(W) :-
     
     % get first value from list
@@ -75,7 +91,45 @@ main(W) :-
         format('~d\n', D1),
         format('~s\n', Type),
         format('~s\n', Op),
-        format('~d\n', Total)
+        format('~d\n', Total),
+
+        % Handle different cases and call proper functions
+        % Type is odd
+        (   Type =@= odd ->
+            format('type is odd\n'),
+            (   Op =@= sum ->
+                format('sum odd\n'),
+                sumOdd(X, D1, Total)
+            ;   Op =@= multiply ->
+                format('multiply odd\n'),
+                productOdd(X, D1, Total)
+            ;   format('invalid operation\n')
+            )
+
+            % Type is even
+        ;   Type =@= even ->
+            format('type is even\n'),
+            (   Op =@= sum ->
+                format('sum even\n'),
+                sumEven(X, D1, Total)
+            ;   Op =@= multiply ->
+                format('multiply even\n'),
+                productEven(X, D1, Total)
+            ;   format('invalid operation\n')
+            )
+
+            % Type is both
+        ;   format('type is both\n'),
+            (   Op =@= sum ->
+                format('sum both\n'),
+                sumBoth(X, D1, Type)
+            ;   Op =@= multiply ->
+                format('multiply both\n'),
+                productBoth(X, D1, Type)
+            ;   format('invalid operation\n')
+            )
+        )
+
     ;   
         sentence(D1, Type1, D2, Type2, Op, Total, L1, []) ->
         format('sentence type 2\n'),
@@ -87,6 +141,7 @@ main(W) :-
         format('~d\n', Total)
     ;   format('invalid sentence\n')
     ).
+
 
 %% Common constraints
 even([]).
@@ -118,7 +173,8 @@ sumEven(X, D1, Total) :-
     range(X),
     even(X),
     all_different(X),
-    sum(X, #=, Total).
+    sum(X, #=, Total),
+    write(X), nl.
 
 % Sum odd
 sumOdd(X, D1, Total) :-
@@ -126,14 +182,16 @@ sumOdd(X, D1, Total) :-
     range(X),
     odd(X),
     all_different(X),
-    sum(X, #=, Total).
+    sum(X, #=, Total),
+    write(X), nl.
 
 % Sum both
 sumBoth(X, D1, Total) :-
     length(X, D1),
     range(X),
     all_different(X),
-    sum(X, #=, Total).
+    sum(X, #=, Total),
+    write(X), nl.
 
 % Product even
 productEven(X, D1, Total) :-
@@ -141,7 +199,8 @@ productEven(X, D1, Total) :-
     range(X),
     even(X),
     all_different(X),
-    product(X, 1, Total).
+    product(X, 1, Total),
+    write(X), nl.
 
 % Product odd
 productOdd(X, D1, Total) :-
@@ -149,11 +208,13 @@ productOdd(X, D1, Total) :-
     range(X),
     odd(X),
     all_different(X),
-    product(X, 1, Total).
+    product(X, 1, Total),
+    write(X), nl.
 
 % Product both
 productBoth(X, D1, Total) :-
     length(X, D1),
     range(X),
     all_different(X),
-    product(X, 1, Total).
+    product(X, 1, Total),
+    write(X), nl.
