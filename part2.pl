@@ -91,28 +91,34 @@ main(W) :-
 
 
 %% Common constraints
+
+% All items in list must be even
 even([]).
 even([X|Xs]) :-
     X mod 2 #= 0,
     even(Xs).
 
+% All items in list must be odd
 odd([]).
 odd([X|Xs]) :-
     X mod 2 #= 1,
     odd(Xs).
 
+% All items in list must be 0..Total, 0..128
 range([], Total).
 range([X|Xs], Total) :-
     between(0,Total,X),
     between(0,128,X),
     range(Xs, Total).
 
+% All items in list must sum to Total
 sum([], Sum, Total) :-
     Sum =:= Total.
 sum([X|Xs], Sum, Total) :-
     Sum =< Total,
     sum(Xs, X + Sum, Total).
 
+% All items in list must multiply to Total
 product([], Product, Total) :-
     Product =:= Total.
 product([X|Xs], Product, Total) :-
@@ -209,7 +215,38 @@ sumOddOdd(X, D1, D2, Total) :-
     sum(X, 0, Total),
     write(X), nl.
 
-% Sum even odd
+% Sum even both
+sumEvenBoth(X, Deven, Dboth, Total) :-
+    length(X1, Deven),
+    length(X2, Dboth),
+    even(X1),
+    append(X1, X2, X),
+    range(X, Total),
+    all_different(X),
+    sum(X, 0, Total),
+    write(X), nl.
+
+% Sum odd both
+sumOddBoth(X, Dodd, Dboth, Total) :-
+    length(X1, Dodd),
+    length(X2, Dboth),
+    odd(X1),
+    append(X1, X2, X),
+    range(X, Total),
+    all_different(X),
+    sum(X, 0, Total),
+    write(X), nl.
+
+% Sum both both
+sumBothBoth(X, D1, D2, Total) :-
+    D3 is D1 + D2,
+    length(X, D3),
+    range(X, Total),
+    all_different(X),
+    sum(X, 0, Total),
+    write(X), nl.
+
+% Product even odd
 productEvenOdd(X, Deven, Dodd, Total) :-
     length(X1, Deven),
     length(X2, Dodd),
@@ -221,7 +258,7 @@ productEvenOdd(X, Deven, Dodd, Total) :-
     product(X, 1, Total),
     write(X), nl.
 
-% Sum even even
+% Product even even
 productEvenEven(X, D1, D2, Total) :-
     D3 is D1 + D2,
     length(X, D3),
@@ -231,12 +268,43 @@ productEvenEven(X, D1, D2, Total) :-
     product(X, 1, Total),
     write(X), nl.
 
-% Sum odd odd
+% Product odd odd
 productOddOdd(X, D1, D2, Total) :-
     D3 is D1 + D2,
     length(X, D3),
     range(X, Total),
     odd(X),
+    all_different(X),
+    product(X, 1, Total),
+    write(X), nl.
+
+% Product even both
+productEvenBoth(X, Deven, Dboth, Total) :-
+    length(X1, Deven),
+    length(X2, Dboth),
+    even(X1),
+    append(X1, X2, X),
+    range(X, Total),
+    all_different(X),
+    product(X, 1, Total),
+    write(X), nl.
+
+% Product even both
+productOddBoth(X, Dodd, Dboth, Total) :-
+    length(X1, Dodd),
+    length(X2, Dboth),
+    odd(X1),
+    append(X1, X2, X),
+    range(X, Total),
+    all_different(X),
+    product(X, 1, Total),
+    write(X), nl.
+
+% Product both both
+productBothBoth(X, D1, D2, Total) :-
+    D3 is D1 + D2,
+    length(X, D3),
+    range(X, Total),
     all_different(X),
     product(X, 1, Total),
     write(X), nl.
