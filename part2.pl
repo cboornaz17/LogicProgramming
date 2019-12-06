@@ -5,135 +5,8 @@
 sentence(D1, Type, Op, Total)  --> find, a, set, of, digit(D1), type(Type), integers, that, oper(Op), to, digit(Total).
 sentence(D1, Type1, D2, Type2, Op, Total)  --> find, a, set, of, digit(D1), type(Type1), and, digit(D2), type(Type2), integers, that, oper(Op), to, digit(Total).
 
-digit(0) --> ["0"].
-digit(1) --> ["1"].
-digit(2) --> ["2"].
-digit(3) --> ["3"].
-digit(4) --> ["4"].
-digit(5) --> ["5"].
-digit(6) --> ["6"].
-digit(7) --> ["7"].
-digit(8) --> ["8"].
-digit(9) --> ["9"].
-digit(10) --> ["10"].
-digit(11) --> ["11"].
-digit(12) --> ["12"].
-digit(13) --> ["13"].
-digit(14) --> ["14"].
-digit(15) --> ["15"].
-digit(16) --> ["16"].
-digit(17) --> ["17"].
-digit(18) --> ["18"].
-digit(19) --> ["19"].
-digit(20) --> ["20"].
-digit(21) --> ["21"].
-digit(22) --> ["22"].
-digit(23) --> ["23"].
-digit(24) --> ["24"].
-digit(25) --> ["25"].
-digit(26) --> ["26"].
-digit(27) --> ["27"].
-digit(28) --> ["28"].
-digit(29) --> ["29"].
-digit(30) --> ["30"].
-digit(31) --> ["31"].
-digit(32) --> ["32"].
-digit(33) --> ["33"].
-digit(34) --> ["34"].
-digit(35) --> ["35"].
-digit(36) --> ["36"].
-digit(37) --> ["37"].
-digit(38) --> ["38"].
-digit(39) --> ["39"].
-digit(40) --> ["40"].
-digit(41) --> ["41"].
-digit(42) --> ["42"].
-digit(43) --> ["43"].
-digit(44) --> ["44"].
-digit(45) --> ["45"].
-digit(46) --> ["46"].
-digit(47) --> ["47"].
-digit(48) --> ["48"].
-digit(49) --> ["49"].
-digit(50) --> ["50"].
-digit(51) --> ["51"].
-digit(52) --> ["52"].
-digit(53) --> ["53"].
-digit(54) --> ["54"].
-digit(55) --> ["55"].
-digit(56) --> ["56"].
-digit(57) --> ["57"].
-digit(58) --> ["58"].
-digit(59) --> ["59"].
-digit(60) --> ["60"].
-digit(61) --> ["61"].
-digit(62) --> ["62"].
-digit(63) --> ["63"].
-digit(64) --> ["64"].
-digit(65) --> ["65"].
-digit(66) --> ["66"].
-digit(67) --> ["67"].
-digit(68) --> ["68"].
-digit(69) --> ["69"].
-digit(70) --> ["70"].
-digit(71) --> ["71"].
-digit(72) --> ["72"].
-digit(73) --> ["73"].
-digit(74) --> ["74"].
-digit(75) --> ["75"].
-digit(76) --> ["76"].
-digit(77) --> ["77"].
-digit(78) --> ["78"].
-digit(79) --> ["79"].
-digit(80) --> ["80"].
-digit(81) --> ["81"].
-digit(82) --> ["82"].
-digit(83) --> ["83"].
-digit(84) --> ["84"].
-digit(85) --> ["85"].
-digit(86) --> ["86"].
-digit(87) --> ["87"].
-digit(88) --> ["88"].
-digit(89) --> ["89"].
-digit(90) --> ["90"].
-digit(91) --> ["91"].
-digit(92) --> ["92"].
-digit(93) --> ["93"].
-digit(94) --> ["94"].
-digit(95) --> ["95"].
-digit(96) --> ["96"].
-digit(97) --> ["97"].
-digit(98) --> ["98"].
-digit(99) --> ["99"].
-digit(100) --> ["100"].
-digit(101) --> ["101"].
-digit(102) --> ["102"].
-digit(103) --> ["103"].
-digit(104) --> ["104"].
-digit(105) --> ["105"].
-digit(106) --> ["106"].
-digit(107) --> ["107"].
-digit(108) --> ["108"].
-digit(109) --> ["109"].
-digit(110) --> ["110"].
-digit(111) --> ["111"].
-digit(112) --> ["112"].
-digit(113) --> ["113"].
-digit(114) --> ["114"].
-digit(115) --> ["115"].
-digit(116) --> ["116"].
-digit(117) --> ["117"].
-digit(118) --> ["118"].
-digit(119) --> ["119"].
-digit(120) --> ["120"].
-digit(121) --> ["121"].
-digit(122) --> ["122"].
-digit(123) --> ["123"].
-digit(124) --> ["124"].
-digit(125) --> ["125"].
-digit(126) --> ["126"].
-digit(127) --> ["127"].
-digit(128) --> ["128"].
+digit(D) --> 
+    [A], { number_string(D, A) }.
 
 type(even) --> ["even"].
 type(odd) --> ["odd"].
@@ -151,9 +24,42 @@ that --> ["that"].
 to --> ["to"].
 
 
+% Get vars. current, total, list
+add_vars(C, N, L) :-
+    ( C =@= 0 ->
+        format('l is empty list\n'),
+        L = [],
+        format('assigned L\n'),
+        write(L), nl,
+        add_vars(C + 1, N, L)
+    ; C >= N -> 
+        format('end of recursion\n')
+    ;   
+        format('normal step\n'),
+        append(L, A, L),
+        write(L),
+        add_vars(C + 1, N, L)
+
+    ).
+
+
+
+
+% Handle case 1
 compute(D1, Type, Oper, Total) :-
-    format('D1 ~d\n', D1),
-    fail.
+
+    (   Type =@= odd ->
+        format('type is odd\n')
+    ;   Type =@= even ->
+        format('type is even\n')
+    ;   format('type is both\n')
+    ),
+
+    S = [],
+    get_sum(Total, Evens, S, D1),
+
+    format('finish function\n').
+
 
 compute(D1, Type1, D2, Type2, Oper, Total) :-
     format('word\n'),
@@ -161,44 +67,30 @@ compute(D1, Type1, D2, Type2, Oper, Total) :-
 
 main(W) :-
     
+    % get first value from list
     nth0(0, W, A),
     split_string(A, " ", "", L1),
 
+    format('before sentence\n'),
     write(L1), nl,
+    % Parse values from the sentence
+    ( 
+        sentence(D1, Type, Op, Total, L1, []) ->
+        format('sentence type 1\n'),
+        format('~d\n', D1),
+        format('~s\n', Type),
+        format('~s\n', Op),
+        format('~d\n', Total)
+    ;   
+        sentence(D1, Type1, D2, Type2, Op, Total, L1, []) ->
+        format('sentence type 2\n'),
+        format('~d\n', D1),
+        format('~s\n', Type1),
+        format('~d\n', D2),
+        format('~s\n', Type2),
+        format('~s\n', Op),
+        format('~d\n', Total)
+    ;   format('invalid sentence\n')
+    ).
 
-    sentence(D1, Type, Op, Total, L1, []),
-
-    format('~d\n', D1),
-    format('~s\n', Type),
-    format('~s\n', Op),
-    format('~d\n', Total).
-
-    %% nth0(0, W, A),
-    %% format('A ~s\n', A),
-
-    %% atom_string(A, S),
-    %% format('S ~s\n', S),
-
-    %% split_string(S, " ", "", L1),
-    %% write(L1).
-
-%% Find a set of 2 even numbers that sum to 8
-%% even(D) :-
-%%     mod(D) #= 0.
-
-%% odd(D) :-
-%%     mod(D) #= 0.
-
-%% num(N) :-
-%%     between(0, 128, N).
-
-%% q(D1, D2) :-
-%%     even(D1),
-%%     even(D2),
-%%     D1 + D2 #= 8.
-
-%% allq(D) :-
-%%     findnsols(1, [D1, D2], q(D1, D2), D),
-%%     nth0(0, D, Val1),
-%%     nth0(1, D, Val2),
-%%     format('~d,~d\n', Val1, Val2).
+    
