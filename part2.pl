@@ -22,59 +22,6 @@ and --> ["and"].
 that --> ["that"].
 to --> ["to"].
 
-
-% Get vars. current, total, list
-add_vars(C, N, L) :-
-    ( C =@= 0 ->
-        format('l is empty list\n'),
-        L = [],
-        format('assigned L\n'),
-        write(L), nl,
-        add_vars(C + 1, N, L)
-    ; C >= N -> 
-        format('end of recursion\n')
-    ;   
-        format('normal step\n'),
-        append(L, A, L),
-        write(L),
-        add_vars(C + 1, N, L)
-
-    ).
-
-% Handle case 1
-compute(D1, Type, Oper, Total) :-
-
-    (   Type =@= odd ->
-        format('type is odd\n'),
-        (   Oper =@= sum ->
-            format('sum odd\n')
-        ;   Oper =@= multiply ->
-            format('multiply odd\n')
-        ;   format('invalid operation\n')
-        )
-    ;   Type =@= even ->
-        format('type is even\n'),
-        (   Oper =@= sum ->
-            format('sum even\n')
-        ;   Oper =@= multiply ->
-            format('multiply even\n')
-        ;   format('invalid operation\n')
-        )
-    ;   format('type is both\n'),
-        (   Oper =@= sum ->
-            format('sum both\n')
-        ;   Oper =@= multiply ->
-            format('multiply both\n')
-        ;   format('invalid operation\n')
-        )
-    ).
-
-
-compute(D1, Type1, D2, Type2, Oper, Total) :-
-    format('word\n'),
-    fail.
-
-
 % swipl -q -f part2.pl -t main "find a set of 3 odd integers that sum to 8"
 main(W) :-
     
