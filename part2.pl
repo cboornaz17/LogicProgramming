@@ -101,16 +101,14 @@ odd([X|Xs]) :-
 
 range([]).
 range([X|Xs]) :-
-    0 #=< X,
-    X #=< 128,
+    between(0,128,X),
     range(Xs).
 
+
+product([], Product, Total) :-
+    Product =:= Total.
 product([X|Xs], Product, Total) :-
-    Temp = X * Product,
-    product([Xs], Temp, Total).
-product(X, Product, Total) :-
-    Temp = X * Product,
-    Temp #= Total.
+    product(Xs, X * Product, Total).
 
 %% Operation functions
 
@@ -122,12 +120,6 @@ sumEven(X, D1, Total) :-
     all_different(X),
     sum(X, #=, Total).
 
-sumEvenOut(X, D1, Total) :-
-    findall(A, sumEven(A, D1, Total), X),
-    term_variables(X, Vars),
-    labeling([enum, ff], Vars),
-    write(Vars), nl.
-
 % Sum odd
 sumOdd(X, D1, Total) :-
     length(X, D1),
@@ -136,24 +128,12 @@ sumOdd(X, D1, Total) :-
     all_different(X),
     sum(X, #=, Total).
 
-sumOddOut(X, D1, Total) :-
-    findall(A, sumOdd(A, D1, Total), X),
-    term_variables(X, Vars),
-    labeling([enum, ff], Vars),
-    write(Vars), nl.
-
 % Sum both
 sumBoth(X, D1, Total) :-
     length(X, D1),
     range(X),
     all_different(X),
     sum(X, #=, Total).
-
-sumBothOut(X, D1, Total) :-
-    findall(A, sumBoth(A, D1, Total), X),
-    term_variables(X, Vars),
-    labeling([enum, ff], Vars),
-    write(Vars), nl.
 
 % Product even
 productEven(X, D1, Total) :-
@@ -163,8 +143,17 @@ productEven(X, D1, Total) :-
     all_different(X),
     product(X, 1, Total).
 
-productEvenOut(X, D1, Total) :-
-    findall(A, productEven(A, D1, Total), X),
-    term_variables(X, Vars),
-    labeling([enum, ff], Vars),
-    write(Vars), nl.
+% Product odd
+productOdd(X, D1, Total) :-
+    length(X, D1),
+    range(X),
+    odd(X),
+    all_different(X),
+    product(X, 1, Total).
+
+% Product both
+productBoth(X, D1, Total) :-
+    length(X, D1),
+    range(X),
+    all_different(X),
+    product(X, 1, Total).
